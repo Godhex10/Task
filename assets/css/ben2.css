@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.omnitrix {
+    position: relative; /* Changed to relative for centering */
+    height: 100px; /* Further reduced size */
+    width: 100px; /* Further reduced size */
+    max-width: 100px; /* Further reduced size */
+    animation: spin 5s linear infinite; /* Added spin animation */
+}
+
+/* Spin Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.omnitrix .ominip {
+    position: absolute; /* Changed to absolute for proper positioning */
+    background: gray;
+    border: solid 6px gray; /* Reduced border size */
+    z-index: 3; /* Corrected syntax */
+    border-radius: 50%;
+    height: 100px; /* Further reduced size */
+    width: 100px; /* Further reduced size */
+    padding: 15px; /* Adjusted padding */
+    top: 50%; /* Center vertically within the container */
+    left: 50%; /* Center horizontally within the container */
+    transform: translate(-50%, -50%); /* Center the button */
+}
+
+button img {
+    position: absolute; /* Changed to absolute for centering */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the image */
+    height: auto;
+    width: auto;
+    max-width: 100px; /* Further reduced size */
+}
+
+.omnitrix .ominib {
+    position: absolute; /* Changed to absolute for positioning */
+    border-radius: 50%;
+    background: #5cbf00; /* Darker shade of green */
+    left: 40px; /* Adjusted for absolute positioning */
+    bottom: 15px; /* Adjusted for positioning */
+    border: solid 4px #003300; /* Darker shade for border */
+    height: 15px; /* Further reduced size */
+    width: 15px; /* Further reduced size */
+}
+
+.omnitrix .ominib:active {
+    border: solid 4px #5cbf00; /* Darker shade of green */
+    background: #4caf50; /* Darker shade of green */
+    filter: drop-shadow(0 0 15px #5cbf00); /* Darker shade for glow */
+}
+
+img.pressione {
+    z-index: 2;
+    filter: drop-shadow(0 0 15px #5cbf00); /* Darker shade for glow */
+    opacity: 100%;
+}
+
+.effect {
+    position: absolute; /* Changed to absolute for positioning */
+    z-index: 20;
+    top: 10px; /* Adjusted top position */
+    opacity: 50%;
+    left: 50%; /* Center horizontally within the button */
+    transform: translateX(-50%); /* Center the effect */
+    filter: blur(20px); /* Adjusted blur */
+    background: #5cbf00; /* Darker shade of green */
+    height: 90px; /* Further reduced size */
+    width: 60px; /* Further reduced size */
+}
+
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: black; /* Or any background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it stays on top */
+}
+
+#preloader.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
