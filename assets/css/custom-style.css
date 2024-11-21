@@ -42,6 +42,31 @@
     color: #fff;
 }
 
+.welcome{
+    font-family: 'valorax', Arial, sans-serif;
+    color: #fff;
+    font-size: 20px;
+    margin-top: 25px;
+}
+
+.sign-in-button{
+    font-family: 'valorax', Arial, sans-serif;
+    color: #fff;
+}
+
+.work{
+    font-family: 'valorax', Arial, sans-serif;
+    color: #fff;
+    font-size: 10px;
+}
+
+.login{
+    font-family: 'valorax', Arial, sans-serif;
+    color: #fff;
+    font-size: 12px;
+}
+
+
 .task-perform p{
     font-family: 'valorax', Arial, sans-serif;
     color: #33cc33;
