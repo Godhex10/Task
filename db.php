@@ -11,4 +11,14 @@ $conn = new mysqli($host, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Get tasks for each status
+$statuses = ['todo', 'in_progress', 'pending', 'done'];
+$tasks = [];
+
+foreach ($statuses as $status) {
+    $stmt = $pdo->prepare("SELECT * FROM tasks WHERE status = :status");
+    $stmt->execute(['status' => $status]);
+    $tasks[$status] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>

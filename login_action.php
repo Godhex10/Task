@@ -1,7 +1,7 @@
 <?php
 session_start(); // Start the session to store user information
 
-include 'db.php'; // Include the database connection
+include './includes/db.php'; // Include the database connection
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Use null-safe operator to handle missing keys
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Password matches, set session and redirect to main dashboard
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
-            header('Location: index.html'); // Redirect to main dashboard page
+            header('Location: index.php'); // Redirect to main dashboard page
             exit();
         } else {
             // Incorrect password

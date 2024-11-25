@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2024 at 01:37 PM
+-- Generation Time: Nov 26, 2024 at 06:14 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,6 +24,33 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL,
+  `task_name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `status` enum('Todo','In Progress','Pending','Done') NOT NULL DEFAULT 'Todo',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`id`, `task_name`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'test', 'sessssttt', 'Pending', '2024-11-24 20:42:39', '2024-11-25 18:36:22'),
+(5, 'test333444', 'ffffffffffff', 'Todo', '2024-11-25 19:18:54', '2024-11-25 19:18:54'),
+(6, 'test35555', 'vfdavfssd', 'Todo', '2024-11-25 19:20:07', '2024-11-25 19:20:07'),
+(7, 'omo', 'fihvifhdvhfihv', 'Todo', '2024-11-25 19:21:08', '2024-11-25 19:21:08'),
+(8, 'pending task', 'its pending', 'Pending', '2024-11-25 19:30:49', '2024-11-25 19:30:49'),
+(9, 'Progress', 'its a progress', 'Done', '2024-11-25 19:36:37', '2024-11-25 19:37:24');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -34,15 +61,14 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'prince', '123456789');
-
---
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tasks`
+--
+ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -56,10 +82,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `tasks`
+--
+ALTER TABLE `tasks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

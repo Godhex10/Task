@@ -18630,7 +18630,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 [data-bs-theme=dark] .form-control:focus,[data-bs-theme=dark] .form-select:focus {
-    border-color: #5d87ff!important
+    border-color: #5f5f5f !important
 }
 
 [data-bs-theme=dark] input::file-selector-button {
@@ -18787,7 +18787,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 [data-bs-theme=dark] .breadcrumb-item+.breadcrumb-item::before,[data-bs-theme=dark] .nav-pills .nav-link,[data-bs-theme=dark] .nav-tabs .nav-link {
-    color: #7c8fac
+    color: #33cc33
 }
 
 [data-bs-theme=dark] .ql-snow .ql-stroke {
@@ -18849,7 +18849,8 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 [data-bs-theme=dark] .connect-sorting,[data-bs-theme=dark] .connect-sorting-todo {
-    background: var(--bs-dark-bg-subtle)
+    background-color: #101010;
+    border: 1px solid #ffffff83;
 }
 
 [data-bs-theme=dark] .wizard-content .wizard>.steps .step,[data-bs-theme=dark] .wizard-content .wizard>.steps>ul>li.current .step {
@@ -18872,10 +18873,10 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 [data-bs-theme=dark][data-color-theme=Blue_Theme]:root .btn-primary,[data-bs-theme=light][data-color-theme=Blue_Theme]:root .btn-primary {
-    --bs-btn-bg: #5d87ff;
-    --bs-btn-border-color: #5d87ff;
-    --bs-btn-hover-bg: #4f73d9;
-    --bs-btn-hover-border-color: #4f73d9
+    --bs-btn-bg: #33cc33;
+    --bs-btn-border-color: #33cc33;
+    --bs-btn-hover-bg: #289e28;
+    --bs-btn-hover-border-color: #289e28;
 }
 
 [data-bs-theme=dark][data-color-theme=Blue_Theme]:root .btn-secondary,[data-bs-theme=light][data-color-theme=Blue_Theme]:root .btn-secondary {
@@ -21936,7 +21937,7 @@ textarea.form-control-lg {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background-color: transparent;
+    background-color: #101010;
     background-image: var(--bs-form-select-bg-img),var(--bs-form-select-bg-icon,none);
     background-repeat: no-repeat;
     background-position: right 16px center;
@@ -52511,15 +52512,18 @@ body .connect-sorting-todo {
 }
 
 body .connect-sorting-inprogress {
-    background-color: var(--bs-secondary-bg-subtle)!important
+   background-color: #101010;
+    border: 1px solid #ffffff83;
 }
 
 body .connect-sorting-pending {
-    background-color: var(--bs-info-bg-subtle)!important
+    background-color: #101010;
+    border: 1px solid #ffffff83;
 }
 
 body .connect-sorting-done {
-    background-color: var(--bs-success-bg-subtle)!important
+    background-color: #101010;
+    border: 1px solid #ffffff83;
 }
 
 body .connect-sorting {
@@ -52547,7 +52551,7 @@ body .connect-sorting .task-container-header .dropdown .dropdown-toggle {
     justify-content: center;
     box-shadow: var(--bs-box-shadow);
     border-radius: 100%;
-    background-color: var(--bs-body-bg);
+    background-color: #33cc33;
     font-weight: var(--font-weight-bolder)
 }
 

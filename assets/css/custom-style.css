@@ -81,3 +81,35 @@
     font-family: 'Valorax';
     color: #fff;
 }
+
+.text{
+    font-family: 'Valorax';
+    color: #fff;
+}
+
+.text-green{
+    color: #33cc33;
+}
+
+.text-white{
+    color: #fff;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal.show {
+    display: block;
+    top: 300px;
+    position: relative;
+  }
+  
