@@ -231,3 +231,46 @@ async function deleteTask(taskId) {
         }
     }
 }
+
+
+//FOR UPDATING TASK STATUS AFTER DROPPING
+const columns = document.querySelectorAll(".connect-sorting-content");
+
+columns.forEach(column => {
+    column.addEventListener("drop", async (event) => {
+        event.preventDefault();
+        const taskId = event.dataTransfer.getData("text/plain");
+        const newStatus = column.getAttribute("data-item");
+
+        try {
+            // Update the task's status in the database
+            const response = await fetch('update_status.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: taskId, status: newStatus }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Move the task to the new column
+                const taskElement = document.getElementById(taskId);
+                column.appendChild(taskElement);
+                alert("Task updated successfully!");
+            } else {
+                alert(result.message || "Failed to update task.");
+            }
+        } catch (error) {
+            console.error("Error updating task status:", error);
+            alert("An error occurred while updating the task.");
+        }
+    });
+
+    column.addEventListener("dragover", (event) => {
+        event.preventDefault();
+    });
+});
+
+

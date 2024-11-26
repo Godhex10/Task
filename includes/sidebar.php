@@ -1,5 +1,7 @@
 <?php
-session_start();  // Start the session before accessing $_SESSION
+if (session_status() === PHP_SESSION_NONE) {
+  session_start(); // Only start if a session isn't already active
+}
 ?>
 
 <html>
@@ -47,7 +49,7 @@ session_start();  // Start the session before accessing $_SESSION
             <!-- Dashboard -->
             <!-- ---------------------------------- -->
             <li class="sidebar-item">
-              <a class="sidebar-link" href="index.html" aria-expanded="false">
+              <a class="sidebar-link" href="index.php" aria-expanded="false">
                 <span>
                   <i class="ti"><img src="./assets/img/dash.png" width="23px" height="23px" alt="" srcset=""></i>
                 </span>
@@ -63,7 +65,7 @@ session_start();  // Start the session before accessing $_SESSION
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./app-finance.html" aria-expanded="false">
+              <a class="sidebar-link" href="./app-finance.php" aria-expanded="false">
                 <span>
                   <i class="ti"><img src="./assets/img/dash.png" width="23px" height="23px" alt="" srcset=""></i>
                 </span>
@@ -1529,7 +1531,7 @@ session_start();  // Start the session before accessing $_SESSION
               <h6 class="mb-0 fs-4 fw-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></h6>
               <span class="fs-2">Designer</span>
             </div>
-            <form action="../logout.php" method="POST">
+            <form action="logout.php" method="POST">
               <button type="submit" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
                 <i class="fa-solid fa-power-off"></i>
               </button>
