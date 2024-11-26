@@ -1027,6 +1027,45 @@ require 'includes/db.php';
         }
       </script>
 
+
+
+</div>
+<!-- Modal HTML Structure -->
+<div class="modal" id="editTaskModal" style="display: none;">
+   <div class="modal-dialog">
+      <div class="modal-contentt">
+         <div class="modal-header">
+            <h5 class="modal-title text">Edit Task</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            
+         </div>
+         <form id="editTaskForm">
+            <div class="modal-body">
+               <!-- Hidden Task ID -->
+               <input type="hidden" id="taskId" name="taskId">
+               <div class="form-group">
+                  <label for="taskName">Task Name</label>
+                  <input type="text" class="form-control" id="taskName" name="taskName" placeholder="New Task name" required>
+               </div>
+               <div class="form-group mt-3">
+                  <label for="taskDescription">Description</label>
+                  <textarea class="form-control" id="taskDescription" name="taskDescription" rows="4" placeholder="New Description" required></textarea>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+
+
+
+
     </div>
 
   </div>

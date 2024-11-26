@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2024 at 06:14 AM
+-- Generation Time: Nov 26, 2024 at 11:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -41,12 +41,12 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `task_name`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'test', 'sessssttt', 'Pending', '2024-11-24 20:42:39', '2024-11-25 18:36:22'),
-(5, 'test333444', 'ffffffffffff', 'Todo', '2024-11-25 19:18:54', '2024-11-25 19:18:54'),
-(6, 'test35555', 'vfdavfssd', 'Todo', '2024-11-25 19:20:07', '2024-11-25 19:20:07'),
-(7, 'omo', 'fihvifhdvhfihv', 'Todo', '2024-11-25 19:21:08', '2024-11-25 19:21:08'),
-(8, 'pending task', 'its pending', 'Pending', '2024-11-25 19:30:49', '2024-11-25 19:30:49'),
-(9, 'Progress', 'its a progress', 'Done', '2024-11-25 19:36:37', '2024-11-25 19:37:24');
+(1, 'test1', 'testing my first task', 'Pending', '2024-11-24 20:42:39', '2024-11-26 21:19:27'),
+(5, 'test20', 'test 20 update', 'Todo', '2024-11-25 19:18:54', '2024-11-26 22:52:50'),
+(6, 'test3', 'testing my third task', 'Todo', '2024-11-25 19:20:07', '2024-11-26 21:21:15'),
+(9, 'test6', 'testing my sixth task', 'Done', '2024-11-25 19:36:37', '2024-11-26 21:21:43'),
+(10, 'test7', 'My 7th task', 'In Progress', '2024-11-26 21:35:27', '2024-11-26 21:35:27'),
+(11, 'test 16', 'Testing new task', 'Done', '2024-11-26 22:53:23', '2024-11-26 22:53:23');
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`

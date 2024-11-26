@@ -32,8 +32,8 @@ async function loadTasks() {
                                   <i class="fa-solid fa-ellipsis" style="color: #fff;"></i>
                               </a>
                               <div class="dropdown-menu dropdown-menu-end">
-                                  <a class="dropdown-item" href="javascript:void(0);">Edit</a>
-                                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                   <button class="edit-btn btn" onclick="openEditTaskModal(${task.id})">Edit</button>
+                                   <button class="delete-btn btn" onclick="deleteTask(${task.id})">Delete</button>
                               </div>
                           </div>
                       </div>
@@ -64,8 +64,170 @@ async function loadTasks() {
 }
 
 // Call the function on page load
-loadTasks();
+document.addEventListener("DOMContentLoaded", function() {
+    loadTasks();
+});
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Function to open the modal
+function openEditTaskModal(taskId) {
+    // Example: You can fetch the task data based on the ID
+    console.log("Editing task with ID:", taskId);
+    
+    // Simulate fetching task data for this example
+    const taskData = { 
+        task_name: 'New Task name', 
+        description: 'New Description' 
+    };
+
+    // Fill the form with task data
+    document.getElementById('taskName').value = taskData.task_name;
+    document.getElementById('taskDescription').value = taskData.description;
+
+    // Show the modal
+    const modal = document.getElementById('editTaskModal');
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+}
+
+// Close the modal when clicking the close button or the overlay
+document.querySelector('.modal .close').addEventListener('click', closeModal);
+document.querySelector('.modal').addEventListener('click', (e) => {
+    // Close the modal if the overlay (background) is clicked
+    if (e.target === e.currentTarget) {
+        closeModal();
+    }
+});
+
+function closeModal() {
+    const modal = document.getElementById('editTaskModal');
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Function to submit the edited task to the backend
+async function submitEditTaskForm() {
+    const taskId = document.getElementById('taskId').value;  // Hidden input with task ID
+    const taskName = document.getElementById('taskName').value;
+    const taskDescription = document.getElementById('taskDescription').value;
+
+    // Create a FormData object to send the data
+    const formData = new FormData();
+    formData.append('taskId', taskId);
+    formData.append('taskName', taskName);
+    formData.append('taskDescription', taskDescription);
+
+    try {
+        // Send the data using fetch API
+        const response = await fetch('update_task.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            alert(data.message);  // Show success message
+            closeModal();  // Close the modal
+            loadTasks();  // Reload tasks after updating
+        } else {
+            alert(data.message);  // Show error message
+        }
+    } catch (error) {
+        console.error('Error updating task:', error);
+        alert('An error occurred while updating the task.');
+    }
+}
+
+// Modify the modal open function to populate hidden task ID
+function openEditTaskModal(taskId) {
+    // Fetch the task data based on the ID (this can be done via AJAX if needed)
+    console.log("Editing task with ID:", taskId);
+
+    // Example: You can fetch task data for this example
+    const taskData = { 
+        task_name: '', 
+        description: '' 
+    };
+
+    // Fill the form with task data
+    document.getElementById('taskName').value = taskData.task_name;
+    document.getElementById('taskDescription').value = taskData.description;
+    document.getElementById('taskId').value = taskId;  // Set the task ID in hidden input
+
+    // Show the modal
+    const modal = document.getElementById('editTaskModal');
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+}
+
+// Add event listener to form submission
+document.getElementById('editTaskForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitEditTaskForm();
+});
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById('editTaskModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
+}
+
+
+
+
+
+//FUCNTION TO DELETE TASK FROM BOARD
+async function deleteTask(taskId) {
+    if (confirm("Are you sure you want to delete this task?")) {
+        try {
+            const response = await fetch(`delete_task.php?id=${taskId}`, {
+                method: "DELETE",
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                // Remove the task from the UI
+                document.getElementById(taskId).remove();
+                alert("Task deleted successfully.");
+            } else {
+                alert(data.message || "Failed to delete task.");
+            }
+        } catch (error) {
+            console.error("Error deleting task:", error);
+            alert("An error occurred while deleting the task.");
+        }
+    }
+}
