@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2024 at 11:59 PM
+-- Generation Time: Nov 27, 2024 at 07:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -51,6 +51,30 @@ INSERT INTO `tasks` (`id`, `task_name`, `description`, `status`, `created_at`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
+  `type` enum('income','expense') NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `description` text NOT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `type`, `amount`, `description`, `date`, `created_at`) VALUES
+(4, 'income', 50000.00, 'game', '2024-12-06', '2024-11-27 18:20:23'),
+(5, 'expense', 2000.00, 'game', '2024-12-07', '2024-11-27 18:27:50'),
+(6, 'expense', 2000.00, 'game', '2024-11-29', '2024-11-27 18:30:32');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -61,6 +85,14 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`) VALUES
+(1, 'prince', '123456789'),
+(2, 'Ebere', '123456789');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -68,6 +100,12 @@ CREATE TABLE `users` (
 -- Indexes for table `tasks`
 --
 ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -85,13 +123,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

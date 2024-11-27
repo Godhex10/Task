@@ -274,3 +274,30 @@ columns.forEach(column => {
 });
 
 
+
+
+
+
+//FUNCTION TO OPEN TRANSACTION MODAL FROM FINANCE PAGE
+// JavaScript for modal functionality
+const openModalBtn = document.getElementById('openTransactionForm');
+const modal = document.getElementById('transactionModal');
+const closeModalBtn = document.getElementById('closeTransactionModal');
+
+// Open the modal
+openModalBtn.addEventListener('click', () => {
+    modal.style.display = 'block';
+});
+
+// Close the modal
+closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Close the modal if user clicks outside the modal dialog
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
