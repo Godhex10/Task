@@ -12,13 +12,13 @@ if (session_status() === PHP_SESSION_NONE) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Favicon icon-->
-  <link rel="shortcut icon" type="image/png" href="<link rel="shortcut icon" type="image/png" href="./assets/img/dash.png" />" />
+  <link rel="shortcut icon" type="image/png" href="./assets/img/dash.png" />
 
   <!-- Core Css -->
   <link rel="stylesheet" href="./assets/css/styles.css" />
   <link rel="stylesheet" href="./assets/css/custom-style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <link rel="stylesheet" href="./assets/css/ben2.css">
+  
 
   <title>Prince Dashboard</title>
 </head>
@@ -28,9 +28,9 @@ if (session_status() === PHP_SESSION_NONE) {
         <!-- Start Vertical Layout Sidebar -->
         <!-- ---------------------------------- -->
         <div class="brand-logo d-flex align-items-center justify-content-between god-logo">
-          <a href="https://bootstrapdemos.adminmart.com/modernize/dist/dark/index.html" class="text-nowrap">
+          <!-- <a href="https://bootstrapdemos.adminmart.com/modernize/dist/dark/index.html" class="text-nowrap">
            <p>Godhex</p>
-          </a>
+          </a> -->
           <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
             <i class="fa-solid fa-x"></i>
           </a>
@@ -80,16 +80,16 @@ if (session_status() === PHP_SESSION_NONE) {
                 <span class="hide-menu">Projects</span>
               </a>
             </li> -->
-            <li class="sidebar-item">
+            <!-- <li class="sidebar-item">
               <a class="sidebar-link" href="https://bootstrapdemos.adminmart.com/modernize/dist/dark/index6.html" aria-expanded="false">
                 <span>
                   <i class="ti"><img src="./assets/img/dash.png" width="23px" height="23px" alt="" srcset=""></i>
                 </span>
                 <span class="hide-menu">Calendar</span>
               </a>
-            </li>
+            </li> -->
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./app-notes.html" aria-expanded="false">
+              <a class="sidebar-link" href="./app-notes.php" aria-expanded="false">
                 <span>
                   <i class="ti"><img src="./assets/img/dash.png" width="23px" height="23px" alt="" srcset=""></i>
                 </span>
@@ -1262,7 +1262,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <!-- ---------------------------------- -->
             <!-- AUTH -->
             <!-- ---------------------------------- -->
-            <li class="nav-small-cap">
+            <!-- <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">AUTH</span>
             </li>
@@ -1385,11 +1385,11 @@ if (session_status() === PHP_SESSION_NONE) {
                 </span>
                 <span class="hide-menu">Maintenance</span>
               </a>
-            </li>
+            </li> -->
             <!-- ---------------------------------- -->
             <!-- DOCUMENTATION -->
             <!-- ---------------------------------- -->
-            <li class="nav-small-cap">
+            <!-- <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">DOCUMENTATION</span>
             </li>
@@ -1400,11 +1400,11 @@ if (session_status() === PHP_SESSION_NONE) {
                 </span>
                 <span class="hide-menu">Getting Started</span>
               </a>
-            </li>
+            </li> -->
             <!-- ---------------------------------- -->
             <!-- OTHER -->
             <!-- ---------------------------------- -->
-            <li class="nav-small-cap">
+            <!-- <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">OTHER</span>
             </li>
@@ -1518,7 +1518,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 </span>
                 <span class="hide-menu">External Link</span>
               </a>
-            </li>
+            </li> -->
           </ul>
         </nav>
 

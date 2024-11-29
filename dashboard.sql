@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2024 at 07:33 PM
+-- Generation Time: Nov 30, 2024 at 07:01 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,6 +20,55 @@ SET time_zone = "+00:00";
 --
 -- Database: `dashboard`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notes`
+--
+
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `note_date` date DEFAULT curdate(),
+  `content` text NOT NULL,
+  `importance` enum('important','non-important') DEFAULT 'non-important'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notes`
+--
+
+INSERT INTO `notes` (`id`, `title`, `note_date`, `content`, `importance`) VALUES
+(8, 'note 7', '2024-11-29', 'note7', 'important'),
+(9, 'note ', '2024-11-29', 'note', 'important'),
+(10, 'note 9', '2024-11-29', 'note 9', 'non-important');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `savings_tracker`
+--
+
+CREATE TABLE `savings_tracker` (
+  `id` int(11) NOT NULL,
+  `goal` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `due_date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `savings_tracker`
+--
+
+INSERT INTO `savings_tracker` (`id`, `goal`, `amount`, `due_date`, `created_at`) VALUES
+(1, 'House Rent', 300.00, '2024-12-01', '2024-11-27 20:52:00'),
+(2, 'food', 300.00, '2024-12-06', '2024-11-27 20:53:56'),
+(4, 'Airpods', 100.00, '2024-12-07', '2024-11-27 21:16:30'),
+(8, 'ps4', 300.00, '2025-01-04', '2024-11-27 21:19:30'),
+(9, 'House Rent 2', 400.00, '2024-12-07', '2024-11-27 21:51:24'),
+(10, 'books', 200.00, '2024-12-06', '2024-11-28 20:29:23');
 
 -- --------------------------------------------------------
 
@@ -68,9 +117,10 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `type`, `amount`, `description`, `date`, `created_at`) VALUES
-(4, 'income', 50000.00, 'game', '2024-12-06', '2024-11-27 18:20:23'),
-(5, 'expense', 2000.00, 'game', '2024-12-07', '2024-11-27 18:27:50'),
-(6, 'expense', 2000.00, 'game', '2024-11-29', '2024-11-27 18:30:32');
+(14, 'income', 3000.00, 'web gig', '2024-12-11', '2024-11-28 20:14:51'),
+(27, 'expense', 3000.00, 'food', '2024-12-05', '2024-11-28 22:22:34'),
+(29, 'income', 2000.00, 'salary', '2024-12-06', '2024-11-29 21:34:22'),
+(30, 'income', 2000.00, 'web', '2024-11-28', '2024-11-29 22:07:19');
 
 -- --------------------------------------------------------
 
@@ -97,6 +147,18 @@ INSERT INTO `users` (`id`, `username`, `password`) VALUES
 --
 
 --
+-- Indexes for table `notes`
+--
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `savings_tracker`
+--
+ALTER TABLE `savings_tracker`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tasks`
 --
 ALTER TABLE `tasks`
@@ -120,6 +182,18 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `notes`
+--
+ALTER TABLE `notes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `savings_tracker`
+--
+ALTER TABLE `savings_tracker`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
@@ -129,7 +203,7 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `users`

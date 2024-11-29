@@ -32,3 +32,21 @@ select.form-control {
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
 }
+
+
+.card-body {
+    max-height: 570px; /* Adjust the height as per your design */
+    overflow-y: auto; /* Makes the content scrollable */
+    padding-top: 50px;
+}
+
+.card-body::-webkit-scrollbar {
+    width: 0px;  /* Hides the scrollbar */
+    background: transparent; /* Makes the scrollbar background invisible */
+}
+
+.btn2 {
+    background-color: #33cc33;
+    color: #fff;
+    border: none;
+}

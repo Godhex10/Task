@@ -16,8 +16,8 @@ $incomeQuery = "SELECT SUM(amount) as total_income FROM transactions WHERE type 
 $resultIncome = $conn->query($incomeQuery);
 $totalIncome = 0;
 if ($resultIncome) {
-    $rowIncome = $resultIncome->fetch_assoc();
-    $totalIncome = $rowIncome['total_income'];
+  $rowIncome = $resultIncome->fetch_assoc();
+  $totalIncome = $rowIncome['total_income'];
 }
 
 // Fetch total expenses
@@ -25,15 +25,22 @@ $expenseQuery = "SELECT SUM(amount) as total_expenses FROM transactions WHERE ty
 $resultExpenses = $conn->query($expenseQuery);
 $totalExpenses = 0;
 if ($resultExpenses) {
-    $rowExpenses = $resultExpenses->fetch_assoc();
-    $totalExpenses = $rowExpenses['total_expenses'];
+  $rowExpenses = $resultExpenses->fetch_assoc();
+  $totalExpenses = $rowExpenses['total_expenses'];
 }
 
 // Calculate the balance
 $balance = $totalIncome - $totalExpenses;
+
+// Fetch savings data
+$sql = "SELECT * FROM savings_tracker ORDER BY due_date ASC";
+$result = $conn->query($sql);
+
+// Check if the query was successful
+if (!$result) {
+  die("Error executing query: " . $conn->error);
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-bs-theme="dark" data-color-theme="Blue_Theme" data-layout="vertical">
 
@@ -52,6 +59,8 @@ $balance = $totalIncome - $totalExpenses;
   <!-- Core Css -->
   <link rel="stylesheet" href="./assets/css/styles.css" />
   <link rel="stylesheet" href="./assets/css/budget-style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="./assets/css/ben2.css">
 
   <title>Prince | Finance</title>
 </head>
@@ -71,25 +80,34 @@ $balance = $totalIncome - $totalExpenses;
     <?php include './includes/sidebar.php'; ?>
     <!--  Sidebar End -->
     <div class="page-wrapper">
+      <!--  Header Start -->
+      <?php include './includes/header.php';?>
+      <!--  Header End -->
 
+      <?php include './includes/left-side-bar.php';?>
       <div class="body-wrapper">
-        <div class="container-fluid" style="margin-top: -40px;">
+        <div class="container-fluid">
           <div class="row">
             <div class="col-12">
               <div class="d-flex align-items-center gap-4 mb-4">
                 <div class="position-relative">
                   <div class="border border-2 border-primary rounded-circle">
-                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/profile/user-1.jpg" class="rounded-circle m-1" alt="user1" width="60" />
+                    <img src="./assets/img/ben.png" class="rounded-circle m-1" alt="user1" width="60" />
                   </div>
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-primary"> 3
-                    <span class="visually-hidden">unread messages</span>
-                  </span>
                 </div>
                 <div>
                   <h3 class="fw-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span></h3>
+                  <span>Cheers, and happy activities - <span id="currentDate"></span>
+                  </span>
+                </div>
+
+              </div>
+
+              <div class="card">
+                <div class="card-body">
                   <!-- Button to open the modal -->
                   <!-- Trigger Button -->
-                  <button class="btn btn-primary btn2" id="openModalButton">Add Transaction</button>
+                  <button class="btn btn-primary btn2" id="openModalButton" style="float: right; margin-top:30px; margin-right:10px;">Add Transaction</button>
                   <!-- Modal -->
                   <div class="modal" id="addTransactionModal" style="display: none; top: 5px;">
                     <div class="modal-dialog">
@@ -130,111 +148,144 @@ $balance = $totalIncome - $totalExpenses;
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div class="row pb-4">
 
+                    <div class="col-lg-4">
+                      <h5 class="card-title fw-semibold">Financial Summary</h5>
+                      <p>Total Revenue</p>
+                      <h2 class="mt-2 fw-bold">$<?php echo number_format($totalIncome, 2); ?></h2>
+                    </div>
+                  </div>
+                  <div class="border-top">
+                    <div class="row gx-0">
+                      <div class="col-md-4 border-end">
+                        <div class="p-4">
+                          <p class="fs-4 text-primary mb-0">Income</p>
+                          <h3 class="mt-2 mb-0">$<?php echo number_format($totalIncome, 2); ?></h3>
+                        </div>
+                      </div>
+                      <div class="col-md-4 border-end">
+                        <div class="p-4">
+                          <p class="fs-4 text-danger mb-0">Expense</p>
+                          <h3 class="mt-2 mb-0">$<?php echo number_format($totalExpenses, 2); ?></h3>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="p-4">
+                          <p class="fs-4 text-info mb-0">Balance</p>
+                          <h3 class="mt-2 mb-0">$<?php echo number_format($balance, 2); ?></h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div class="card">
-    <div class="card-body">
-        <div class="row pb-4">
-            <div class="col-lg-4">
-                <h5 class="card-title fw-semibold">Financial Summary</h5>
-                <p>Total Revenue</p>
-                <h2 class="mt-2 fw-bold">$<?php echo number_format($totalIncome, 2); ?></h2>
-            </div>
-        </div>
-        <div class="border-top">
-            <div class="row gx-0">
-                <div class="col-md-4 border-end">
-                    <div class="p-4">
-                        <p class="fs-4 text-primary mb-0">Income</p>
-                        <h3 class="mt-2 mb-0">$<?php echo number_format($totalIncome, 2); ?></h3>
-                    </div>
-                </div>
-                <div class="col-md-4 border-end">
-                    <div class="p-4">
-                        <p class="fs-4 text-danger mb-0">Expense</p>
-                        <h3 class="mt-2 mb-0">$<?php echo number_format($totalExpenses, 2); ?></h3>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-4">
-                        <p class="fs-4 text-info mb-0">Balance</p>
-                        <h3 class="mt-2 mb-0">$<?php echo number_format($balance, 2); ?></h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
             </div>
             <div class="col-lg-5 d-flex align-items-stretch">
               <div class="card w-100">
-                <div class="card-body">
-                  <h5 class="card-title fw-semibold">Upcoming Activity</h5>
-                  <p class="card-subtitle">Preparation for the Upcoming Activity</p>
-                  <div class="mt-9 py-6 d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-primary-subtle text-primary rounded-circle round d-flex align-items-center justify-content-center">
-                      <i class="ti ti-map-pin fs-6"></i>
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 fw-semibold">Trip to Singapore</h6>
-                      <span class="fs-3">working on</span>
-                    </div>
-                    <div class="ms-auto">
-                      <span class="fs-2">12:00 AM</span>
-                    </div>
-                  </div>
-                  <div class="py-6 d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-danger-subtle text-danger rounded-circle round d-flex align-items-center justify-content-center">
-                      <i class="ti ti-bookmark fs-6"></i>
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 fw-semibold">Archived Data</h6>
-                      <span class="fs-3">working on</span>
-                    </div>
-                    <div class="ms-auto">
-                      <span class="fs-2">3:52 PM</span>
-                    </div>
-                  </div>
-                  <div class="py-6 d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-success-subtle text-success rounded-circle round d-flex align-items-center justify-content-center">
-                      <i class="ti ti-microphone fs-6"></i>
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 fw-semibold">Meeting with Client</h6>
-                      <span class="fs-3">working on</span>
-                    </div>
-                    <div class="ms-auto">
-                      <span class="fs-2">4:50 PM</span>
-                    </div>
-                  </div>
-                  <div class="py-6 d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-warning-subtle text-warning rounded-circle round d-flex align-items-center justify-content-center">
-                      <i class="ti ti-cast fs-6"></i>
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 fw-semibold ">Screening Task Team</h6>
-                      <span class="fs-3">working on</span>
-                    </div>
-                    <div class="ms-auto">
-                      <span class="fs-2">5:10 PM</span>
-                    </div>
-                  </div>
-                  <div class="pt-6 d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-info-subtle text-info rounded-circle round d-flex align-items-center justify-content-center">
-                      <i class="ti ti-mail fs-6"></i>
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 fw-semibold">Send envelope to John</h6>
-                      <span class="fs-3">working on</span>
-                    </div>
-                    <div class="ms-auto">
-                      <span class="fs-2">6:00 PM</span>
+                <!-- Add Savings Goal Button -->
+
+                <!-- Popup Form Modal -->
+                <div id="savingsModal" class="modal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h2>Add Savings Goal</h2>
+                        <span class="close-btn">&times;</span>
+                      </div>
+                      <div class="modal-body">
+                        <form id="savingsForm" action="add_savings.php" method="POST">
+                          <div class="form-group">
+                            <label for="goal">Goal</label>
+                            <input type="text" id="goal" name="goal" required class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" id="amount" name="amount" required class="form-control" step="0.01">
+                          </div>
+                          <div class="form-group">
+                            <label for="due_date">Due Date</label>
+                            <input type="date" id="due_date" name="due_date" required class="form-control">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save Goal</button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div class="card-body">
+                  <button id="addSavingsBtn" class="btn btn-primary" style="float: right; margin-top:8px">Add</button>
+                  <h5 class="card-title fw-semibold">Upcoming Bills</h5>
+                  <p class="card-subtitle">Track your upcoming Bills</p>
+
+                  <?php
+                  if ($result->num_rows > 0) {
+                    // Output each row
+                    while ($row = $result->fetch_assoc()) {
+                      $goal = $row['goal'];
+                      $amount = $row['amount'];
+                      $due_date = date('F j, Y', strtotime($row['due_date'])); // Formatting the due date
+                      $goal_id = $row['id']; // Store the goal's ID
+                  ?>
+
+                      <div class="py-6 d-flex align-items-center" style="margin-top: 10px;">
+                        <div class="flex-shrink-0 bg-primary-subtle text-primary rounded-circle round d-flex align-items-center justify-content-center">
+                          <i class="fa-solid fa-dollar-sign"></i>
+                        </div>
+                        <div class="ms-3">
+                          <h6 class="mb-0 fw-semibold"><?php echo $goal; ?></h6>
+                          <span class="fs-3">$<?php echo number_format($amount, 2); ?> | <?php echo $due_date; ?></span>
+                          <span class="fs-2"></span>
+                        </div>
+                        <div class="ms-auto" style="padding-left: 10px;">
+                          <!-- Edit and Delete Buttons -->
+                          <button class="btn btn-warning btn2 btn-sm" style="margin-right: 7px;" data-bs-toggle="modal" data-bs-target="#editGoalModal" data-id="<?php echo $goal_id; ?>" data-goal="<?php echo $goal; ?>" data-amount="<?php echo $amount; ?>" data-due_date="<?php echo $row['due_date']; ?>"><i class="fa-solid fa-pen" style="color: #ffae1f;"></i></button>
+                          <a href="delete_savings_goal.php?id=<?php echo $goal_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this goal?');"><i class="fa-solid fa-trash" style="color: #fa896b;"></i></a>
+                        </div>
+                      </div>
+
+                  <?php
+                    }
+                  } else {
+                    echo "No savings goals found.";
+                  }
+                  ?>
+
+                  <!-- Edit Goal Modal -->
+                  <div class="modal fade" id="editGoalModal" tabindex="-1" aria-labelledby="editGoalModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="editGoalModalLabel">Edit Savings Goal</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Edit Goal Form -->
+                          <form action="update_savings_goal.php" method="POST">
+                            <input type="hidden" id="goal_id" name="id">
+                            <div class="mb-3">
+                              <label for="goal_name" class="form-label">Goal Name</label>
+                              <input type="text" class="form-control" id="goal_name" name="goal" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="goal_amount" class="form-label">Goal Amount</label>
+                              <input type="number" class="form-control" id="goal_amount" name="amount" step="0.01" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="goal_due_date" class="form-label">Due Date</label>
+                              <input type="date" class="form-control" id="goal_due_date" name="due_date" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
               </div>
             </div>
             <div class="col-lg-7 d-flex align-items-stretch">
@@ -244,9 +295,6 @@ $balance = $totalIncome - $totalExpenses;
                     <div>
                       <h5 class="card-title fw-semibold">Sales Hourly</h5>
                       <div class="d-flex gap-2">
-                        <span>
-                          <span class="round-8 text-bg-primary rounded-circle d-inline-block"></span>
-                        </span>
                         <span>Your data updates every 3 hours</span>
                       </div>
                     </div>
@@ -257,7 +305,7 @@ $balance = $totalIncome - $totalExpenses;
                     </div>
                   </div>
                 </div>
-                <div id="activity-status"></div>
+                <canvas id="dashboardChart" width="400" height="200"></canvas>
               </div>
             </div>
             <div class="col-12">
@@ -265,27 +313,16 @@ $balance = $totalIncome - $totalExpenses;
                 <div class="card-body">
                   <div class="d-md-flex align-items-center mb-9">
                     <div>
-                      <h4 class="card-title fw-semibold">Order Status</h4>
-                      <p class="card-subtitle">How to Check Your Order Status Online</p>
+                      <h4 class="card-title fw-semibold">Recent Transactions</h4>
+                      <p class="card-subtitle">Your Recent Transactions</p>
                     </div>
                     <div class="ms-auto mt-4 mt-md-0">
-                      <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                          <a class="nav-link rounded active" data-bs-toggle="tab" href="#home" role="tab">
-                            <span>Checkout</span>
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link rounded" data-bs-toggle="tab" href="#profile" role="tab">
-                            <span>Paid</span>
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link rounded" data-bs-toggle="tab" href="#messages" role="tab">
-                            <span>Packed</span>
-                          </a>
-                        </li>
-                      </ul>
+                      <div class="d-flex align-items-center justify-content-between mb-3">
+                        <form method="GET" action="" class="d-flex align-items-center justify-content-between mb-3" id="searchForm">
+                          <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search transactions..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                          <button type="submit" class="btn btn-primary ms-2">Search</button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                   <!-- Tab panes -->
@@ -293,320 +330,113 @@ $balance = $totalIncome - $totalExpenses;
                     <div class="tab-pane active" id="home" role="tabpanel">
                       <div class="table-responsive">
                         <table class="table align-middle mb-0 text-nowrap">
-                          <tbody>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-1.jpg" class="rounded" alt="p1" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
+                          <!-- Edit Transaction Modal -->
+                          <div id="editModal" class="modal" style="display:none;">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4>Edit Transaction</h4>
+                                  <span class="close-btn" onclick="closeEditModal()" style="font-size: 25px; margin-top:10px; cursor:pointer;">&times;</span>
                                 </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-warning-subtle text-warning rounded-pill">
-                                  <span class="round-8 text-bg-warning rounded-circle d-inline-block me-1"></span>progress
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-2.jpg" class="rounded" alt="p2" width="80" />
+                                <form id="editTransactionForm">
+                                  <div class="modal-body">
+                                    <input type="hidden" id="editTransactionId" name="id">
+                                    <div class="form-group">
+                                      <label for="editDescription">Description:</label>
+                                      <input type="text" id="editDescription" name="description" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="editAmount">Amount:</label>
+                                      <input type="number" id="editAmount" name="amount" class="form-control" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="editDate">Date:</label>
+                                      <input type="date" id="editDate" name="date" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="editType">Type:</label>
+                                      <select id="editType" name="type" class="form-control" required>
+                                        <option value="Income">Income</option>
+                                        <option value="Expense">Expense</option>
+                                      </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
                                   </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Oyhan Ruhiyan</h6>
-                                    <span class="fs-2">oyhan@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>Frontend Dev - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$49.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-success-subtle text-success rounded-pill">
-                                  <span class="round-8 text-bg-success rounded-circle d-inline-block me-1"></span>delivered
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-3.jpg" class="rounded" alt="p3" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Dayat Santoso</h6>
-                                    <span class="fs-2">dayat@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>UX Research - Power Courses</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$79.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-danger-subtle text-danger rounded-pill">
-                                  <span class="round-8 text-bg-danger rounded-circle d-inline-block me-1"></span>cancel
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-4.jpg" class="rounded" alt="p4" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-success-subtle text-success rounded-pill">
-                                  <span class="round-8 text-bg-success rounded-circle d-inline-block me-1"></span>delivered
-                                </span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    <div class="tab-pane" id="profile" role="tabpanel">
-                      <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0 text-nowrap">
-                          <tbody>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-2.jpg" class="rounded" alt="p2" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Oyhan Ruhiyan</h6>
-                                    <span class="fs-2">oyhan@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>Frontend Dev - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$49.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-success-subtle text-success rounded-pill">
-                                  <span class="round-8 text-bg-success rounded-circle d-inline-block me-1"></span>delivered
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-1.jpg" class="rounded" alt="p1" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-warning-subtle text-warning rounded-pill">
-                                  <span class="round-8 text-bg-warning rounded-circle d-inline-block me-1"></span>progress
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-3.jpg" class="rounded" alt="p3" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Dayat Santoso</h6>
-                                    <span class="fs-2">dayat@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>UX Research - Power Courses</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$79.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-danger-subtle text-danger rounded-pill">
-                                  <span class="round-8 text-bg-danger rounded-circle d-inline-block me-1"></span>cancel
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-4.jpg" class="rounded" alt="p4" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-success-subtle text-success rounded-pill">
-                                  <span class="round-8 text-bg-success rounded-circle d-inline-block me-1"></span>delivered
-                                </span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    <div class="tab-pane" id="messages" role="tabpanel">
-                      <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0 text-nowrap">
-                          <tbody>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-4.jpg" class="rounded" alt="p4" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <a href="javascript:void(0)" class="badge bg-success-subtle text-success rounded-pill">
-                                  <span class="round-8 text-bg-success rounded-circle d-inline-block me-1"></span>delivered
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-1.jpg" class="rounded" alt="p1" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-warning-subtle text-warning rounded-pill">
-                                  <span class="round-8 text-bg-warning rounded-circle d-inline-block me-1"></span>progress
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-2.jpg" class="rounded" alt="p2" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Oyhan Ruhiyan</h6>
-                                    <span class="fs-2">oyhan@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>Frontend Dev - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$49.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-success-subtle text-success rounded-pill">
-                                  <span class="round-8 text-bg-success rounded-circle d-inline-block me-1"></span>delivered
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/products/product-3.jpg" class="rounded" alt="p3" width="80" />
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Dayat Santoso</h6>
-                                    <span class="fs-2">dayat@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>UX Research - Power Courses</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$79.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-danger-subtle text-danger rounded-pill">
-                                  <span class="round-8 text-bg-danger rounded-circle d-inline-block me-1"></span>cancel
-                                </span>
-                              </td>
-                            </tr>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                          <tbody id="transactionsTable">
+                            <?php
+                            // Check if a search term has been provided
+                            $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+                            // Modify the query based on the search input
+                            $query = "SELECT * FROM transactions WHERE description LIKE ? ORDER BY date DESC LIMIT 5";
+                            $stmt = $conn->prepare($query);
+                            $searchTerm = '%' . $search . '%';  // Wildcard search
+                            $stmt->bind_param('s', $searchTerm);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            if ($result && $result->num_rows > 0) {
+                              while ($row = $result->fetch_assoc()) {
+                                $id = $row['id']; // Assuming 'id' is the primary key in your table
+                                $description = $row['description'];
+                                $amount = number_format($row['amount'], 2);
+                                $date = date('jS F Y', strtotime($row['date'])); // Format date
+                                $type = ucfirst($row['type']); // Capitalize the first letter
+                                $badgeClass = $type === 'Income' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+                            ?>
+                                <tr>
+                                  <td class="ps-0">
+                                    <div class="d-flex align-items-center gap-3">
+                                      <div class="flex-shrink-0">
+                                        <img src="./assets/img/dollar2.svg" class="rounded" alt="icon" width="50" />
+                                      </div>
+                                      <div>
+                                        <h6 class="mb-0 fw-semibold"><?php echo $description; ?></h6>
+                                        <span class="fs-2"><?php echo $date; ?></span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="ps-0">
+                                    <span>$<?php echo $amount; ?></span>
+                                  </td>
+                                  <td class="ps-0">
+                                    <h6 class="mb-0"><span class="badge <?php echo $badgeClass; ?> rounded-pill"><?php echo $type; ?></span></h6>
+                                  </td>
+                                  <td class="text-end ps-0">
+                                    <button class="btn btn-sm btn-warning" style="margin-right: 10px;"
+                                      onclick="openEditModal({
+                                        id: <?php echo $id; ?>,
+                                        description: '<?php echo addslashes($description); ?>',
+                                        amount: '<?php echo $amount; ?>',
+                                        date: '<?php echo date('Y-m-d', strtotime($row['date'])); ?>',
+                                        type: '<?php echo $type; ?>'
+                                      })">
+                                      <i class="fa-solid fa-pen"></i>
+                                    </button>
+
+                                    <button class="btn btn-sm btn-danger" onclick="deleteTransaction(<?php echo $id; ?>)"><i class="fa-solid fa-trash"></i></button>
+                                  </td>
+                                </tr>
+                            <?php
+                              }
+                            } else {
+                              echo "<tr><td colspan='5' class='text-center'>No transactions found.</td></tr>";
+                            }
+                            ?>
                           </tbody>
                         </table>
                       </div>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
-            <div class="col-lg-5 d-flex align-items-stretch">
+            <!-- <div class="col-lg-5 d-flex align-items-stretch">
               <div class="card w-100">
                 <div class="card-body">
                   <h4 class="card-title fw-semibold">Tasks</h4>
@@ -661,8 +491,8 @@ $balance = $totalIncome - $totalExpenses;
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-7 d-flex align-items-stretch">
+            </div> -->
+            <!-- <div class="col-lg-7 d-flex align-items-stretch">
               <div class="card w-100">
                 <div class="card-body border-bottom">
                   <div class="d-md-flex align-items-center">
@@ -741,161 +571,11 @@ $balance = $totalIncome - $totalExpenses;
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
-      <script>
-        function handleColorTheme(e) {
-          document.documentElement.setAttribute("data-color-theme", e);
-        }
-      </script>
-      <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-        <i class="icon ti ti-settings fs-7"></i>
-      </button>
-
-      <div class="offcanvas customizer offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
-          <h4 class="offcanvas-title fw-semibold" id="offcanvasExampleLabel">
-            Settings
-          </h4>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body h-n80" data-simplebar>
-          <h6 class="fw-semibold fs-4 mb-2">Theme</h6>
-
-          <div class="d-flex flex-row gap-3 customizer-box" role="group">
-            <input type="radio" class="btn-check light-layout" name="theme-layout" id="light-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary rounded-2" for="light-layout">
-              <i class="icon ti ti-brightness-up fs-7 me-2"></i>Light
-            </label>
-
-            <input type="radio" class="btn-check dark-layout" name="theme-layout" id="dark-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary rounded-2" for="dark-layout">
-              <i class="icon ti ti-moon fs-7 me-2"></i>Dark
-            </label>
-          </div>
-
-          <h6 class="mt-5 fw-semibold fs-4 mb-2">Theme Direction</h6>
-          <div class="d-flex flex-row gap-3 customizer-box" role="group">
-            <input type="radio" class="btn-check" name="direction-l" id="ltr-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary" for="ltr-layout">
-              <i class="icon ti ti-text-direction-ltr fs-7 me-2"></i>LTR
-            </label>
-
-            <input type="radio" class="btn-check" name="direction-l" id="rtl-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary" for="rtl-layout">
-              <i class="icon ti ti-text-direction-rtl fs-7 me-2"></i>RTL
-            </label>
-          </div>
-
-          <h6 class="mt-5 fw-semibold fs-4 mb-2">Theme Colors</h6>
-
-          <div class="d-flex flex-row flex-wrap gap-3 customizer-box color-pallete" role="group">
-            <input type="radio" class="btn-check" name="color-theme-layout" id="Blue_Theme" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary d-flex align-items-center justify-content-center" onclick="handleColorTheme('Blue_Theme')" for="Blue_Theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="BLUE_THEME">
-              <div class="color-box rounded-circle d-flex align-items-center justify-content-center skin-1">
-                <i class="ti ti-check text-white d-flex icon fs-5"></i>
-              </div>
-            </label>
-
-            <input type="radio" class="btn-check" name="color-theme-layout" id="Aqua_Theme" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary d-flex align-items-center justify-content-center" onclick="handleColorTheme('Aqua_Theme')" for="Aqua_Theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="AQUA_THEME">
-              <div class="color-box rounded-circle d-flex align-items-center justify-content-center skin-2">
-                <i class="ti ti-check text-white d-flex icon fs-5"></i>
-              </div>
-            </label>
-
-            <input type="radio" class="btn-check" name="color-theme-layout" id="Purple_Theme" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary d-flex align-items-center justify-content-center" onclick="handleColorTheme('Purple_Theme')" for="Purple_Theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="PURPLE_THEME">
-              <div class="color-box rounded-circle d-flex align-items-center justify-content-center skin-3">
-                <i class="ti ti-check text-white d-flex icon fs-5"></i>
-              </div>
-            </label>
-
-            <input type="radio" class="btn-check" name="color-theme-layout" id="green-theme-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary d-flex align-items-center justify-content-center" onclick="handleColorTheme('Green_Theme')" for="green-theme-layout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="GREEN_THEME">
-              <div class="color-box rounded-circle d-flex align-items-center justify-content-center skin-4">
-                <i class="ti ti-check text-white d-flex icon fs-5"></i>
-              </div>
-            </label>
-
-            <input type="radio" class="btn-check" name="color-theme-layout" id="cyan-theme-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary d-flex align-items-center justify-content-center" onclick="handleColorTheme('Cyan_Theme')" for="cyan-theme-layout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="CYAN_THEME">
-              <div class="color-box rounded-circle d-flex align-items-center justify-content-center skin-5">
-                <i class="ti ti-check text-white d-flex icon fs-5"></i>
-              </div>
-            </label>
-
-            <input type="radio" class="btn-check" name="color-theme-layout" id="orange-theme-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary d-flex align-items-center justify-content-center" onclick="handleColorTheme('Orange_Theme')" for="orange-theme-layout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="ORANGE_THEME">
-              <div class="color-box rounded-circle d-flex align-items-center justify-content-center skin-6">
-                <i class="ti ti-check text-white d-flex icon fs-5"></i>
-              </div>
-            </label>
-          </div>
-
-          <h6 class="mt-5 fw-semibold fs-4 mb-2">Layout Type</h6>
-          <div class="d-flex flex-row gap-3 customizer-box" role="group">
-            <div>
-              <input type="radio" class="btn-check" name="page-layout" id="vertical-layout" autocomplete="off" />
-              <label class="btn p-9 btn-outline-primary" for="vertical-layout">
-                <i class="icon ti ti-layout-sidebar-right fs-7 me-2"></i>Vertical
-              </label>
-            </div>
-            <div>
-              <input type="radio" class="btn-check" name="page-layout" id="horizontal-layout" autocomplete="off" />
-              <label class="btn p-9 btn-outline-primary" for="horizontal-layout">
-                <i class="icon ti ti-layout-navbar fs-7 me-2"></i>Horizontal
-              </label>
-            </div>
-          </div>
-
-          <h6 class="mt-5 fw-semibold fs-4 mb-2">Container Option</h6>
-
-          <div class="d-flex flex-row gap-3 customizer-box" role="group">
-            <input type="radio" class="btn-check" name="layout" id="boxed-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary" for="boxed-layout">
-              <i class="icon ti ti-layout-distribute-vertical fs-7 me-2"></i>Boxed
-            </label>
-
-            <input type="radio" class="btn-check" name="layout" id="full-layout" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary" for="full-layout">
-              <i class="icon ti ti-layout-distribute-horizontal fs-7 me-2"></i>Full
-            </label>
-          </div>
-
-          <h6 class="fw-semibold fs-4 mb-2 mt-5">Sidebar Type</h6>
-          <div class="d-flex flex-row gap-3 customizer-box" role="group">
-            <a href="javascript:void(0)" class="fullsidebar">
-              <input type="radio" class="btn-check" name="sidebar-type" id="full-sidebar" autocomplete="off" />
-              <label class="btn p-9 btn-outline-primary" for="full-sidebar">
-                <i class="icon ti ti-layout-sidebar-right fs-7 me-2"></i>Full
-              </label>
-            </a>
-            <div>
-              <input type="radio" class="btn-check " name="sidebar-type" id="mini-sidebar" autocomplete="off" />
-              <label class="btn p-9 btn-outline-primary" for="mini-sidebar">
-                <i class="icon ti ti-layout-sidebar fs-7 me-2"></i>Collapse
-              </label>
-            </div>
-          </div>
-
-          <h6 class="mt-5 fw-semibold fs-4 mb-2">Card With</h6>
-
-          <div class="d-flex flex-row gap-3 customizer-box" role="group">
-            <input type="radio" class="btn-check" name="card-layout" id="card-with-border" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary" for="card-with-border">
-              <i class="icon ti ti-border-outer fs-7 me-2"></i>Border
-            </label>
-
-            <input type="radio" class="btn-check" name="card-layout" id="card-without-border" autocomplete="off" />
-            <label class="btn p-9 btn-outline-primary" for="card-without-border">
-              <i class="icon ti ti-border-none fs-7 me-2"></i>Shadow
-            </label>
-          </div>
-        </div>
-      </div>
+      
     </div>
 
     <!--  Search Bar -->
@@ -989,7 +669,7 @@ $balance = $totalIncome - $totalExpenses;
       </div>
     </div>
     <!--  Shopping Cart -->
-    <div class="offcanvas offcanvas-end shopping-cart" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <!-- <div class="offcanvas offcanvas-end shopping-cart" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
       <div class="offcanvas-header justify-content-between py-4">
         <h5 class="offcanvas-title fs-5 fw-semibold" id="offcanvasRightLabel">
           Shopping Cart
@@ -1078,7 +758,7 @@ $balance = $totalIncome - $totalExpenses;
           <a href="https://bootstrapdemos.adminmart.com/modernize/dist/dark/eco-checkout.html" class="btn btn-outline-primary w-100">Go to shopping cart</a>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="dark-transparent sidebartoggler"></div>
   <script src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/js/vendor.min.js"></script>
@@ -1092,10 +772,339 @@ $balance = $totalIncome - $totalExpenses;
   <script src="./assets/js/script.js"></script>
   <script src="./assets/js/budget-script.js"></script>
 
+  <script class="chat-data">
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('get_chart_data.php')
+        .then(response => response.json())
+        .then(data => {
+          // Initialize the chart with the fetched data
+          const ctx = document.getElementById('dashboardChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'pie', // Change to 'bar' for a bar chart
+            data: {
+              labels: ['Income', 'Expenses', 'Balance'], // Labels for each data type
+              datasets: [{
+                label: 'Budget Overview',
+                data: [data.income, data.expense, data.balance],
+                backgroundColor: [
+                  '#33cc33', // Green for income
+                  '#e31010', // Red for expenses
+                  'rgba(54, 162, 235, 0.6)' // Blue for balance
+                ],
+                borderColor: [
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'top'
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.label}: ${context.raw.toLocaleString()}`;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching chart data:', error));
+    });
+  </script>
+
+  <script class="addtransaction">
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("addTransactionModal");
+      const openModalButton = document.getElementById("openModalButton");
+      const closeModalButtons = [
+        document.getElementById("closeModalButton"),
+        document.getElementById("closeModalButtonFooter")
+      ];
+
+      // Open Modal
+      openModalButton.addEventListener("click", () => {
+        modal.style.display = "block";
+      });
+
+      // Close Modal
+      closeModalButtons.forEach(button =>
+        button.addEventListener("click", () => {
+          modal.style.display = "none";
+        })
+      );
+
+      // Form Submission
+      const form = document.getElementById("addTransactionForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch("add_transaction.php", {
+            method: "POST",
+            body: formData
+          });
+
+          const result = await response.json();
+
+          if (!result.error) {
+            alert(result.message); // Success message
+            modal.style.display = "none"; // Close modal
+            form.reset(); // Reset form fields
+            location.reload();
+          } else {
+            alert(result.message); // Error message
+          }
+        } catch (error) {
+          console.error("Error submitting the form:", error);
+          alert("An error occurred while submitting the form.");
+        }
+      });
+    });
+
+
+    // Get the modal
+    var modal = document.getElementById("savingsModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("addSavingsBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close-btn")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+
+
+  <script class="edit-saving-goal">
+    // Populate modal fields with goal data when Edit button is clicked
+    $('#editGoalModal').on('show.bs.modal', function(event) {
+      var button = $(event.relatedTarget); // Button that triggered the modal
+      var goal_id = button.data('id');
+      var goal_name = button.data('goal');
+      var goal_amount = button.data('amount');
+      var goal_due_date = button.data('due_date');
+
+      var modal = $(this);
+      modal.find('#goal_id').val(goal_id);
+      modal.find('#goal_name').val(goal_name);
+      modal.find('#goal_amount').val(goal_amount);
+      modal.find('#goal_due_date').val(goal_due_date);
+    });
+  </script>
+
+
+
+  <script class="edit-transaction">
+    function openEditModal(transaction) {
+      // Open the modal
+      document.getElementById("editModal").style.display = "block";
+      document.body.classList.add("modal-open");
+
+      // Populate the modal fields
+      document.getElementById("editTransactionId").value = transaction.id;
+      document.getElementById("editDescription").value = transaction.description;
+      document.getElementById("editAmount").value = transaction.amount;
+      document.getElementById("editDate").value = transaction.date;
+      document.getElementById("editType").value = transaction.type;
+    }
+
+    function closeEditModal() {
+      document.getElementById("editModal").style.display = "none";
+      document.body.classList.remove("modal-open");
+    }
+
+    // Handle form submission
+    document.getElementById("editTransactionForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Collect form data
+      const formData = new FormData(this);
+
+      // Send data to the backend
+      fetch("edit_transaction.php", {
+          method: "POST",
+          body: formData,
+        })
+        .then((response) => response.text())
+        .then((data) => {
+          alert(data); // Show success or error message
+          location.reload(); // Reload the page to reflect changes
+        })
+        .catch((error) => console.error("Error updating transaction:", error));
+    });
+
+    function deleteTransaction(id) {
+      if (confirm("Are you sure you want to delete this transaction?")) {
+        // Send an AJAX request to delete the transaction
+        fetch(`delete_transaction.php?id=${id}`, {
+            method: 'GET'
+          })
+          .then(response => response.text())
+          .then(data => {
+            alert(data); // Show a message (e.g., "Transaction deleted")
+            location.reload(); // Reload the page to reflect changes
+          })
+          .catch(error => console.error("Error deleting transaction:", error));
+      }
+    }
+  </script>
+
+  <script class="search">
+    function filterTransactions() {
+      const searchTerm = document.getElementById('searchTransactions').value.toLowerCase();
+      const rows = document.querySelectorAll('table tbody tr');
+
+      rows.forEach((row) => {
+        const description = row.querySelector('h6').textContent.toLowerCase();
+        const date = row.querySelector('.fs-2').textContent.toLowerCase();
+        const type = row.querySelector('.badge').textContent.toLowerCase();
+
+        if (description.includes(searchTerm) || date.includes(searchTerm) || type.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    document.getElementById('searchButton').addEventListener('click', function() {
+      var searchQuery = document.getElementById('searchInput').value.trim();
+
+      // Check if the search term includes "expense" or "income" (case insensitive)
+      var transactionType = '';
+      if (searchQuery.toLowerCase().includes('expense')) {
+        transactionType = 'expense';
+      } else if (searchQuery.toLowerCase().includes('income')) {
+        transactionType = 'income';
+      }
+
+      // Prepare form data with both search term and transaction type
+      var formData = new FormData();
+      formData.append('search', searchQuery);
+      formData.append('transactionType', transactionType); // Add the detected type
+
+      // Send the request via fetch (AJAX)
+      fetch('search.php', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          body: new URLSearchParams(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('transactionsTable').innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('submitTransaction').addEventListener('click', function(event) {
+      console.log('Button clicked'); // Log here to see if it’s triggered multiple times
+      event.preventDefault();
+
+      // Your transaction handling logic...
+    });
+    document.getElementById('submitTransaction').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevents the form from being submitted multiple times
+
+      var formData = new FormData(document.getElementById('transactionForm'));
+
+      fetch('add_transaction.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json()) // Assuming the server responds with JSON
+        .then(data => {
+          if (data.success) {
+            alert('Transaction added successfully');
+            // Clear form fields if needed
+          } else {
+            alert('Error adding transaction');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('submitTransaction').addEventListener('click', function(event) {
+      event.preventDefault();
+
+      var submitButton = this;
+      submitButton.disabled = true; // Disable button to prevent further clicks
+
+      var formData = new FormData(document.getElementById('transactionForm'));
+
+      fetch('add_transaction.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Transaction added successfully');
+          } else {
+            alert('Error adding transaction');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        })
+        .finally(() => {
+          submitButton.disabled = false; // Re-enable button
+        });
+    });
+  </script>
+
+<script class="get-todays-date">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get today's date
+        const today = new Date();
+
+        // Format the date (e.g., 'November 28, 2024')
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = today.toLocaleDateString('en-US', options);
+
+        // Display the date in the HTML element
+        document.getElementById('currentDate').textContent = formattedDate;
+    });
+</script>
+
+
   <!-- solar icons -->
   <script src="../../../../cdn.jsdelivr.net/npm/iconify-icon%401.0.8/dist/iconify-icon.min.js"></script>
   <script src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/js/dashboards/dashboard5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 
 
